@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "node scripts/gen-rss.mjs && next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "next": "latest",
+    "nextra": "^2.13.4",
+    "nextra-theme-blog": "^2.13.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rss": "^1.2.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "@types/eslint": "^8.56.10",
+    "@types/node": "^20.14.8",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^9.5.0",
+    "eslint-plugin-mdx": "^3.1.5",
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-tailwindcss": "^3.17.4",
+    "globals": "^15.6.0",
+    "postcss": "^8.4.38",
+    "prettier": "^3.3.2",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.2",
+    "yaml-loader": "^0.8.1"
+  },
+  "packageManager": "pnpm@9.4.0"
+}
