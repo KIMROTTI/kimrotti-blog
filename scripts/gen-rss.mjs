@@ -6,9 +6,9 @@ const __dirname = path.resolve();
 
 async function generate() {
   const feed = new RSS({
-    title: "Your Name",
-    site_url: "https://codepsy2001.blog",
-    feed_url: "https://codepsy2001.blog/feed.xml",
+    title: "kimrotti",
+    site_url: "https://kimrotti.com/",
+    feed_url: "https://kimrotti.com/feed.xml",
   });
 
   const postsPath = path.join(__dirname, "pages", "posts");

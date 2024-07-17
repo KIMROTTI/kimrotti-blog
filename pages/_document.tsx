@@ -2,7 +2,7 @@ import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   const meta = {
-    title: "코드싸이 블로그",
+    title: "김로티 블로그",
     image: "https://assets.vercel.com/image/upload/q_auto/front/vercel/dps.png",
   };
 

@@ -3,7 +3,7 @@ const YEAR = new Date().getFullYear();
 const footer = <footer style={{ marginTop: "8rem" }}>
   <small>
     <time>{YEAR}</time>
-    © CodePsy-2001.
+    © kimrotti.
     <a href="/feed.xml" style={{ float: "right" }}>RSS</a>
   </small>
 </footer>

@@ -9,292 +9,117 @@ import { Career, Experience } from "../components/Resume";
 import { Tabs } from "nextra/components";
 
 # 소개
-**안녕하세요 김로티입니다.**
+**비즈니스와 데이터를 중심으로 생각하는 개발자 김로티입니다.**
 
-[//]: # ([캔디페이]&#40;https://www.candypay.co.kr&#41; CTO<br />)
+[Moonjin](https://moonjin-landing.vercel.app/) 프로젝트 운영<br/>
 
-[//]: # ([케어펫]&#40;https://www.carepet.io&#41; 테크리드<br />)
+[케어펫](https://www.carepet.io) FullStack Developer & PO<br />
+
+[유어라운드](https://www.carepet.io)  Frontend Developer<br />
 
 [//]: # (`tldr`, `@pgkit` 프로젝트 메인테이너입니다.)
-[//]: # ()
-[//]: # (<p className="mt-1 flex gap-1.5">)
 
-[//]: # (  <a href="mailto:codepsy2001@gmail.com">)
+<p className="mt-1 flex gap-1.5">
 
-[//]: # (    <EmailIcon />)
+  <a href="mailto:kimrotti@gmail.com">
 
-[//]: # (  </a>)
+    <EmailIcon />
 
-[//]: # (  <a href="https://github.com/CodePsy-2001">)
+  </a>
 
-[//]: # (    <GithubIcon />)
+  <a href="https://github.com/KIMROTTI">
 
-[//]: # (  </a>)
+    <GithubIcon />
 
-[//]: # (</p>)
+  </a>
 
-[//]: # ()
-[//]: # (## Skills.)
+</p>
 
-[//]: # (<Tabs items={["Web", "Backend", "Native", "etc"]}>)
 
-[//]: # (  <Tabs.Tab>)
+## Skills.
 
-[//]: # (    - Node.js, Typescript)
+<Tabs items={["Frontend", "Backend", "etc", "Data"]}>
+  <Tabs.Tab>
 
-[//]: # (    - React, Next.js, Remix.js)
+    - Node.js, Typescript
 
-[//]: # (    - Webpack, Rollup, Vite)
+    - React, Next.js, Redux
 
-[//]: # (    - Data Fetching: SWR, react-query)
+    - Data Fetching: SWR
 
-[//]: # (    - CSS, Tailwind)
+    - CSS, Tailwind, Styped-Component
 
-[//]: # (  </Tabs.Tab>)
+  </Tabs.Tab>
 
-[//]: # (  <Tabs.Tab>)
+  <Tabs.Tab>
 
-[//]: # (    - Node.js, Express, Nest.js)
+    - Nest.js
 
-[//]: # (    - DDD &#40;Domain-Driven Design&#41;)
+    - DDD (Domain-Driven Design)
 
-[//]: # (    - SQL, Prisma, TypeORM, Slonik)
+    - SQL, Slonik
 
-[//]: # (    - MySQL, PostgreSQL, MongoDB, Redis)
+    - MySQL, PostgreSQL
 
-[//]: # (    - UNIX, Linux, Nginx, Docker)
 
-[//]: # (  </Tabs.Tab>)
+  </Tabs.Tab>
+  <Tabs.Tab>
 
-[//]: # (  <Tabs.Tab>)
+    - TDD: Vitest
 
-[//]: # (    - PWA &#40;Progressive Web App&#41;)
+    - CI/CD: Github Actions, Google Cloud Platform, AWS
 
-[//]: # (    - React Native, Expo, Flutter)
+    - VCS: Git, Github
 
-[//]: # (    - Electron)
+    - Monorepo: Yarn Workspaces, Turborepo
 
-[//]: # (  </Tabs.Tab>)
+    - Python, C++ for algorithm
 
-[//]: # (  <Tabs.Tab>)
+  </Tabs.Tab>
+  <Tabs.Tab>
 
-[//]: # (    - TDD: Vitest)
+    - PA : GA4, Mixpanel, Hotjar
 
-[//]: # (    - CI/CD: Github Actions, Google Cloud Platform, AWS)
+    - UX/UI : Figma
 
-[//]: # (    - VCS: Git, Github)
+  </Tabs.Tab>
+</Tabs>
 
-[//]: # (    - Monorepo: Yarn Workspaces, Turborepo)
 
-[//]: # (    - Rust, Go, Deno, WASM for fun)
+## Work Experiences.
 
-[//]: # (    - Python, C++ for algorithm)
 
-[//]: # (  </Tabs.Tab>)
+<Career
+  company="캔디페이"
+  href="https://www.candypay.co.kr"
+  position="CTO"
+  period="2024.03 - 현재"
+/>
 
-[//]: # (</Tabs>)
+<Experience
+  title="외주 작업물 인수인계 및 리팩토링"
+  descriptions={[
+    "backend: 서비스 레이어 분리, 테이블 구조 개선, 미구현 기능 재설계",
+    "app: 코드 스플릿, 라우팅 최적화, 상태 관리 최적화",
+    "website: SEO 최적화, 렌더링 최적화, 웹팩 최적화"
+  ]}
+/>
 
-[//]: # ()
-[//]: # (## Work Experiences.)
+<Career
+  company="케어펫"
+  href="https://www.carepet.io"
+  position="테크리드"
+  period="2022.07 - 2024.02"
+/>
 
-[//]: # ()
-[//]: # (<Career)
+<Experience
+  title="Monorepo 구축 및 팀 컨벤션 관리"
+  descriptions={[
+    "Monorepo 도입 및 타입 공유로 백엔드/프론트엔드 병렬 개발 실현.",
+    "내부 패키지 구조 정비로 3인 개발팀이 6개 프론트엔드 프로젝트를 개발 및 관리."
+  ]}
+/>
 
-[//]: # (  company="캔디페이")
-
-[//]: # (  href="https://www.candypay.co.kr")
-
-[//]: # (  position="CTO")
-
-[//]: # (  period="2024.03 - 현재")
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  title="외주 작업물 인수인계 및 리팩토링")
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "backend: 서비스 레이어 분리, 테이블 구조 개선, 미구현 기능 재설계",)
-
-[//]: # (    "app: 코드 스플릿, 라우팅 최적화, 상태 관리 최적화",)
-
-[//]: # (    "website: SEO 최적화, 렌더링 최적화, 웹팩 최적화")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (<Career)
-
-[//]: # (  company="케어펫")
-
-[//]: # (  href="https://www.carepet.io")
-
-[//]: # (  position="테크리드")
-
-[//]: # (  period="2022.07 - 2024.02")
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  title="Monorepo 구축 및 팀 컨벤션 관리")
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "Monorepo 도입 및 타입 공유로 백엔드/프론트엔드 병렬 개발 실현.",)
-
-[//]: # (    "내부 패키지 구조 정비로 3인 개발팀이 6개 프론트엔드 프로젝트를 개발 및 관리.")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  title="e-커머스 시스템 구축")
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "장바구니부터, 결제, 검증, 배송 관리까지의 백엔드 및 데이터베이스 설계 주도.",)
-
-[//]: # (    "월 매출 2,000만원 달성.")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  title="CI/CD 프로세스 개선")
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "EC2에서 Docker 및 Vercel로 배포 체계 전환, 롤백 용이성 향상 및 배포 시간 대폭 단축.",)
-
-[//]: # (    "4명의 팀원이 하루 10회 이상 빠르고 안정적인 배포 달성.")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  title="검색 엔진 최적화 및 렌더 시간 개선")
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "Next.js의 SSR 및 ISR 도입 및 사이트맵 정비로 구글, 네이버에서 상품 검색 시 최상단 노출.",)
-
-[//]: # (    "SSR 최적화 및 백엔드 API 개선으로 페이지 로딩 시간 2.5초에서 1초로 단축.")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  title="자체 퍼널 개발")
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "반려동물 등록 과정에서 고객 경험 개선 요구사항 파악.",)
-
-[//]: # (    "@toss/use-funnel 라이브러리 Next.js 최신 버전에 호환되도록 재개발 및 적용.",)
-
-[//]: # (    "이탈률 30% 감소.",)
-
-[//]: # (    "오픈소스 라이브러리 next-use-funnel 공개.")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  title="외부 인프라 연동")
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "토스페이먼츠, 카카오 알림톡, 디스코드 웹훅, 센드버드.",)
-
-[//]: # (    "메세지 큐 활용한 비동기 통신으로 응답 시간 단축 및 최적화.")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (<Career)
-
-[//]: # (  company="cb-kaar")
-
-[//]: # (  position="학생연구원")
-
-[//]: # (  period="2022.02 - 2022.05")
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "강원대학교 하민수 교수 연구팀에서 학생연구원 자격으로 웹페이지 개발 참여",)
-
-[//]: # (    "1인 개발로 기획, 디자인, 개발, 배포 모두 담당")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (<Career)
-
-[//]: # (  company="원펫")
-
-[//]: # (  position="인턴")
-
-[//]: # (  period="2021.07 - 2021.11")
-
-[//]: # (/>)
-
-[//]: # (<Experience)
-
-[//]: # (  descriptions={[)
-
-[//]: # (    "강아지 MBTI 검사 서비스 및 수의사 커뮤니티 개발")
-
-[//]: # (  ]})
-
-[//]: # (/>)
-
-[//]: # (    <Career)
-
-[//]: # (      company="케어펫")
-
-[//]: # (      href="https://www.carepet.io")
-
-[//]: # (      position="테크리드")
-
-[//]: # (      period="2022.07 - 2024.02")
-
-[//]: # (    />)
-
-[//]: # (    <Experience)
-
-[//]: # (      title="'첫 결제' 인스타그램 마케팅 기획 및 진행")
-
-[//]: # (      descriptions={[)
-
-[//]: # (        "초기 churn 낮추고 빠른 서비스 소개 위함.",)
-
-[//]: # (        "타겟 페르소나 설정 및 구체적인 마케팅 방법 실행.",)
-
-[//]: # (        "전환율 5% 달성.")
-
-[//]: # (      ]})
-
-[//]: # (    />)
 
 ---
 

@@ -2,17 +2,17 @@
     <channel>
         <title><![CDATA[Your Name]]></title>
         <description><![CDATA[Your Name]]></description>
-        <link>https://codepsy2001.blog</link>
+        <link>https://kimrotti.com</link>
         <generator>RSS for Node</generator>
         <lastBuildDate>Sun, 23 Jun 2024 09:18:24 GMT</lastBuildDate>
-        <atom:link href="https://codepsy2001.blog/feed.xml" rel="self" type="application/rss+xml"/>
+        <atom:link href="https://kimrotti.com/feed.xml" rel="self" type="application/rss+xml"/>
         <item>
             <title><![CDATA[Markdown Examples]]></title>
             <description><![CDATA[View examples of all possible Markdown options.]]></description>
             <link>/posts/markdown</link>
             <guid isPermaLink="true">/posts/markdown</guid>
             <category><![CDATA[web development]]></category>
-            <dc:creator><![CDATA[코드싸이]]></dc:creator>
+            <dc:creator><![CDATA[김로티]]></dc:creator>
             <pubDate>Thu, 18 Mar 2021 15:00:00 GMT</pubDate>
         </item>
         <item>
