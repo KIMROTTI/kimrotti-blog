@@ -11,7 +11,7 @@ import { Tabs } from "nextra/components";
 # 소개
 **비즈니스와 데이터를 중심으로 생각하는 개발자 김로티입니다.**
 
-[Moonjin](https://moonjin-landing.vercel.app/) 프로젝트 운영<br/>
+[Moonjin](https://moonjin-landing.vercel.app/) 프로젝트 운영 중<br/>
 
 [케어펫](https://www.carepet.io) FullStack Developer & PO<br />
 
@@ -65,15 +65,13 @@ import { Tabs } from "nextra/components";
   </Tabs.Tab>
   <Tabs.Tab>
 
-    - TDD: Vitest
-
     - CI/CD: Github Actions, Google Cloud Platform, AWS
 
     - VCS: Git, Github
 
-    - Monorepo: Yarn Workspaces, Turborepo
+    - Monorepo: Turborepo
 
-    - Python, C++ for algorithm
+    - Python, C++
 
   </Tabs.Tab>
   <Tabs.Tab>
@@ -91,15 +89,52 @@ import { Tabs } from "nextra/components";
 <Career
   company="케어펫 커머스"
   href="https://www.carepet.io"
-  position="FullStack Developer"
+  position="FullStack"
   period="2023.11 - 2024.09"
 />
 
 <Experience
-  title="Monorepo 구축 및 팀 컨벤션 관리"
+  title="멀티레포에서 모노레포로 레포관리 방식을 변경"
   descriptions={[
-    "Monorepo 도입 및 타입 공유로 백엔드/프론트엔드 병렬 개발 실현.",
-    "내부 패키지 구조 정비로 3인 개발팀이 6개 프론트엔드 프로젝트를 개발 및 관리."
+    "Turborepo(모노레포) 도입 후 6개 이상의 프로젝트 관리에 스위칭 비용 및 초기 프로젝트 셋팅 오버헤드 감소.",
+    "의존성 관리 및 코드 재사용성이 높아졌으며 이전 대비 비즈니스 요구사항을 빠르게 반영하여 가설을 검증할 수 있게됨."
+  ]}
+/>
+
+<Experience
+  title="BFF구조 도입"
+  descriptions={[
+    "DDD패턴의 Backend 구성은 비즈니스의 복잡도가 올라갈수록 코드베이스 관리가 어려워짐.",
+    "BFF를 도입하여 코드베이스 단순화, 개발 시간을 30% 단축하였으며, 기존 API의 오버페칭 문제를 해결함."
+  ]}
+/>
+
+<Experience
+  title="카테고리 시스템 개발"
+  descriptions={[
+    "기존 카테고리는 상품테이블 내에 카테고리 정보가 들어있어 카테고리 수정, 이동에 모든 상품 정보를 변경해야함.",
+    "Adjuncy List를 활용한 트리 구조로 카테고리 노드의 수정, 이동을 용이하게 변경하여 MD가 카테고리를 원하는대로 조작할 수 있도록 시스템을 변경함."
+  ]}
+/>
+
+<Experience
+  title="검색엔진 최적화 및 코드베이스 수정"
+  descriptions={[
+    "레거시 코드를 수정하여 Lighthouse 검색엔진 최적화를 60점에서 100점으로 최적화 진행하여 SEO 가시성 및 접근성 향상.",
+  ]}
+/>
+
+<Experience
+  title="Infinite Scroll 도입"
+  descriptions={[
+    "InfinetScroll을 활용하여 100개 이상의 상품 목록 로딩을 20개씩 로딩하도록 변경하여 페이지 로딩시간을 단축.",
+  ]}
+/>
+
+<Experience
+  title="백오피스 구축"
+  descriptions={[
+    "Retool을 이용해 마케터, MD가 장바구니, 구매 유저정보 조회, 상품등록 등의 작업을 수행할 수 있는 백오피스 제작.",
   ]}
 />
 
@@ -129,19 +164,61 @@ import { Tabs } from "nextra/components";
 <Career
   company="유어라운드"
   href="https://www.candypay.co.kr"
-  position="Frontend Developer"
+  position="FE Developer"
   period="2023.01 - 2023.10"
 />
 
 <Experience
-  title="외주 작업물 인수인계 및 리팩토링"
+  title="프론트엔드 개발 전담"
   descriptions={[
-    "backend: 서비스 레이어 분리, 테이블 구조 개선, 미구현 기능 재설계",
-    "app: 코드 스플릿, 라우팅 최적화, 상태 관리 최적화",
-    "website: SEO 최적화, 렌더링 최적화, 웹팩 최적화"
+    "웹 반응형(PC,Mobile)서비스 개발 및 배포"
   ]}
 />
 
+<Experience
+  title="SEO 이슈 해결 및 최적화"
+  descriptions={[
+    "React CRA의 SEO 문제 해결 및 이미지 최적화 및 번들 사이즈 감소를 통해 성능지표를 개선, Organic 유저 유입수 증가 및 CAC 절감"
+  ]}
+/>
+
+<Experience
+  title="백오피스 개발"
+  descriptions={[
+    "Acquisition 및 UserData, CVR 등 백데이터 관리",
+    "DA와 마케터 사이 커뮤니케이션 비용 및 유저 데이터 분석 시간 70% 이상 단축"
+  ]}
+/>
+
+<Experience
+  title="Redux 상태관리 라이브러리 도입"
+  descriptions={[
+    "Auth 유저 토큰 관리",
+    "Props 복잡도 개선"
+  ]}
+/>
+
+<Experience
+  title="Paypal 결제시스템 연동"
+  descriptions={[
+    "Paypal 결제 시스템을 통한 구독형 서비스 개발",
+    "구독 상태값에 따라 구독 UI 또는 종량제 결제 UI를 보여주도록 설계"
+  ]}
+/>
+
+<Experience
+  title="공유 보상 시스템 구축"
+  descriptions={[
+    "referral_id를 활용한 공유, 보상 시스템 제작하여 서비스 MAU 증가"
+  ]}
+/>
+
+<Experience
+  title="GTM 연동 및 PA툴 이벤트 관리"
+  descriptions={[
+    "Google Tag Manager를 이용해 reddit, quora, taboola, twitter 등 다양한 마케팅 채널 연동 및 이벤트 수집 시스템 구축"
+  ]}
+/>
 
 ---
 
@@ -151,4 +228,5 @@ import { Tabs } from "nextra/components";
 ---
 
 ## etc.
-- 비올라를 합니다.
+- 개발과 더불어 비즈니스에도 관심이 많습니다.
+- 비올라를 좋아합니다.
