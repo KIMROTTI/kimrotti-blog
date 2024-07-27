@@ -1,0 +1,228 @@
+---
+title: Redux - Core concepts & Example
+date: 2023/8/21
+description: 리덕스의 데이터 흐름과 예제를 알아보자.
+tag: Redux, State, JavaScript
+author: You
+---
+
+# Redux - Core concepts & Example (작동 원리와 예제)
+
+이전 문서에서 Redux의 역사와 사용목적에 대해 알아보았다. 이번 문서에서는 Redux의 핵심 개념과 예제를 통해 Redux의 작동 원리를 알아보자.
+
+### Redux 맛보기
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redux basic example</title>
+  </head>
+  <body>
+    <div>
+      <p>
+        Clicked: <span id="value">0</span> times
+        <button id="increment">+</button>
+        <button id="decrement">-</button>
+        <button id="incrementIfOdd">Increment if odd</button>
+        <button id="incrementAsync">Increment async</button>
+      </p>
+    </div>
+    <script type="module">
+      import { createStore } from "https://unpkg.com/redux@latest/dist/redux.browser.mjs";
+
+      // 초기값을 정의합니다.
+      const initialState = {
+        value: 0
+      };
+
+
+      // 새로운 state가 어떻게 동작할지 정의합니다.
+      // 리듀서는 액션이 발생했을 때 어떻게 상태를 업데이트할지 결정합니다.
+      function counterReducer(state = initialState, action) {
+
+        // 리듀서는 일반적으로 발생하는 액션의 타입을 정의하고 어떻게 동작할지 결정합니다. (switch case를 잘봐주세요)
+        switch (action.type) {
+          case "counter/incremented":
+            return { ...state, value: state.value + 1 };
+          case "counter/decremented":
+            return { ...state, value: state.value - 1 };
+          default:
+            return state;
+        }
+      }
+
+      // 리덕스의 state를 저장하는 'store'를 생성합니다. 그리고 리듀서를 통해 상태를 업데이트합니다.
+      const store = createStore(counterReducer);
+
+      // UI를 업데이트할 DOM 요소를 찾습니다.
+      const valueEl = document.getElementById("value");
+
+      // Whenever the store state changes, update the UI by
+      // reading the latest store state and showing new data
+      function render() {
+        // store의 state를 가져옵니다.
+        const state = store.getState();
+        valueEl.innerHTML = state.value.toString();
+      }
+
+      // Update the UI with the initial data
+      render();
+      // And subscribe to redraw whenever the data changes in the future
+      store.subscribe(render);
+
+      // Handle user inputs by "dispatching" action objects,
+      // which should describe "what happened" in the app
+      document
+        .getElementById("increment")
+        .addEventListener("click", function () {
+          store.dispatch({ type: "counter/incremented" });
+        });
+
+      document
+        .getElementById("decrement")
+        .addEventListener("click", function () {
+          store.dispatch({ type: "counter/decremented" });
+        });
+
+      document
+        .getElementById("incrementIfOdd")
+        .addEventListener("click", function () {
+          // We can write logic to decide what to do based on the state
+          if (store.getState().value % 2 !== 0) {
+            store.dispatch({ type: "counter/incremented" });
+          }
+        });
+
+      document
+        .getElementById("incrementAsync")
+        .addEventListener("click", function () {
+          // We can also write async logic that interacts with the store
+          setTimeout(function () {
+            store.dispatch({ type: "counter/incremented" });
+          }, 1000);
+        });
+    </script>
+  </body>
+</html>
+
+```
+위 코드가 리덕스가 작동하는 방식의 전부다. 리덕스는 독립된 js 라이브러리임을 강조하고자 위의 예시코드를 작성하였다. 리덕스는 단순한 컨셉을 가지고 있으며, 이를 통해 상태를 예측 가능하고 유지보수가 쉽게 관리할 수 있다. 이제부터 하나하나 파헤쳐보자.
+
+
+## Redux Core Concepts
+
+### 배울 개념
+
+- Store
+- Reducer
+- Action
+- Dispatch
+
+### Redux 데이터 바인딩 흐름
+
+리덕스는 이하와 같이 `state`를 단방향의 흐름으로 관리한다.
+
+![redux data flow](https://redux.js.org/assets/images/ReduxDataFlowDiagram-49fa8c3968371d9ef6f2a1486bd40a26.gif)
+
+1. Redux의 `Store`와 `Reducer`를 정의합니다.
+2. 사용자의 동작에 의해 `Dispatch`를 통해 `Action`을 스토어에 전송합니다.
+3. `Reducer`는 `Action`과 이전 `State`를 기반으로 `State`를 업데이트합니다.
+4. `Store`는 업데이트된 `State`를 `Subscribe`한 컴포넌트에 전달합니다.
+5. 컴포넌트는 업데이트된 `State`를 통해 UI를 업데이트합니다(render는 별도).
+
+### [Store 정의하기](https://redux.js.org/tutorials/fundamentals/part-4-store)
+
+Store는 애플리케이션의 상태를 저장하는 객체이다. Store는 **직접 수정할 수 없으며** dispatch를 통해 action을 전달하여 Reducer로 상태를 변경할 수 있다. 또한, 애플리케이션에 **단 하나의 루트 스토어**가 존재한다.
+- `createStore(리듀서)` : Store를 생성하는 함수
+
+```
+import { createStore } from "https://unpkg.com/redux@latest/dist/redux.browser.mjs";
+
+const store = createStore(counterReducer);
+```
+
+### [Reducer 정의하기](https://redux.js.org/tutorials/fundamentals/part-3-state-actions-reducers)
+
+Reducer는 애플리케이션의 상태를 변경하는 함수이다. Redux는 실제로 **단 하나의 Reducer 함수**만 가지고 있습니다. Reducer는 이전 상태와 액션을 받아 새로운 상태를 반환한다. Reducer는 **순수 함수**로 작성되어야 하며, 이전 상태를 변경하지 않고 **새로운 상태를 복사한다(immutable updates)**.
+
+- 순수 함수(예측 가능한)로 Root Reducer를 작성하기
+- action의 `type`을 기반으로 액션을 분기하여 상태를 업데이트하기
+- Slice 패턴을 활용하여 특정 기능의 Reducer를 분리하고, 합칠 수 있다
+
+```
+const initialState = {
+        value: 0
+      };
+function counterReducer(state = initialState, action) {
+        switch (action.type) {
+          case "counter/incremented":
+            return { ...state, value: state.value + 1 };
+          case "counter/decremented":
+            return { ...state, value: state.value - 1 };
+          default:
+            return state;
+        }
+      }
+```
+
+### Action 정의하기
+Action은 상태를 변경의 맥락을 담은 일종의 주문서이다. `type`을 필수로 가지며, `payload`를 통해 추가적인 데이터를 전달할 수 있다.
+
+- `type` : 액션의 종류를 나타내는 문자열
+- `payload` : 액션과 함께 전달되는 데이터
+
+```
+{ type: "counter/incremented" }
+{ type: "counter/decremented" }
+{ type: "counter/incremented" }
+{ type: "counter/incremented" }
+
+// payload를 사용하는 경우
+{ type: "counter/incremented", payload: 10 }
+```
+
+### Dispatch 정의하기
+Dispatch는 Action을 Reducer로 전달하는 함수이다. Dispatch를 통해 Action을 전달하면 Reducer가 이를 받아 상태를 업데이트한다.
+
+- `store.dispatch(action)` : Action을 Reducer로 전달하는 함수
+
+```
+store.dispatch({ type: "counter/incremented" });
+```
+
+### State를 가져오기
+위에 정리된 내용을 통해 Store에 상태를 업데이트하였다. 이제 Store를 구독하고 업데이트된 State를 가져와 UI를 업데이트하자.
+
+- `store.subscribe(callback)` : Store를 구독하는 함수
+- `store.getState()` : Store의 상태를 가져오는 함수
+
+```
+function render() {
+        const state = store.getState();
+        valueEl.innerHTML = state.value.toString();
+      }
+
+store.subscribe(render);
+```
+
+## Summary
+
+- Store에 상태를 저장하고, Reducer를 통해 상태를 업데이트한다.
+- Action을 Dispatch를 통해 Reducer로 전달한다.
+- Reducer는 Action의 type을 기반으로 상태를 업데이트한다.
+- Store를 구독하고 업데이트된 State를 가져와 UI를 업데이트한다.
+
+Redux의 단방향 상태관리의 핵심 개념과 예제 코드를 통해 Redux의 작동 원리를 알아보았다. 리덕스의 코어 개념만 작성하였기에 Slice 패턴을 활용하여 특정 기능을 하는 Reducer를 분리한다던가 Redux 공식 Docs에서 권장하는 `RTK`는 무엇이며, 리액트 환경에 적합한 `React-Redux`, 비동기 처리에서는 `Redux-thunk`로 복잡한 상태관리를 어떤방식으로 해결하였는지는 이후 문서에서 정리하도록 하자.
+
+## 참고 자료
+
+- [Redux 공식문서 - Redux Fundamentals, Part 2: Concepts and Data Flow](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow)
+- [Redux 공식문서 - Redux Fundamentals, Part 3: State, Actions, and Reducers
+](https://redux.js.org/tutorials/fundamentals/part-3-state-actions-reducers)
+- [Redux 공식문서 - Three Principles](https://redux.js.org/understanding/thinking-in-redux/three-principles)
+
+---
+
+**다음 글 읽으러 가기 →**
+
+[Redux - Core concepts & Example](./monorepo)
