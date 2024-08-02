@@ -11,7 +11,7 @@ author: You
 이전 문서에서 Redux의 역사와 사용목적에 대해 알아보았다. 이번 문서에서는 Redux의 핵심 개념과 예제를 통해 Redux의 작동 원리를 알아보자.
 
 ### Redux 맛보기
-```
+```html
 <!DOCTYPE html>
 <html>
   <head>
@@ -135,7 +135,7 @@ author: You
 Store는 애플리케이션의 상태를 저장하는 객체이다. Store는 **직접 수정할 수 없으며** dispatch를 통해 action을 전달하여 Reducer로 상태를 변경할 수 있다. 또한, 애플리케이션에 **단 하나의 루트 스토어**가 존재한다.
 - `createStore(리듀서)` : Store를 생성하는 함수
 
-```
+``` js
 import { createStore } from "https://unpkg.com/redux@latest/dist/redux.browser.mjs";
 
 const store = createStore(counterReducer);
@@ -149,7 +149,7 @@ Reducer는 애플리케이션의 상태를 변경하는 함수이다. Redux는 �
 - action의 `type`을 기반으로 액션을 분기하여 상태를 업데이트하기
 - Slice 패턴을 활용하여 특정 기능의 Reducer를 분리하고, 합칠 수 있다
 
-```
+``` js
 const initialState = {
         value: 0
       };
@@ -171,7 +171,7 @@ Action은 상태를 변경의 맥락을 담은 일종의 주문서이다. `type`
 - `type` : 액션의 종류를 나타내는 문자열
 - `payload` : 액션과 함께 전달되는 데이터
 
-```
+``` js
 { type: "counter/incremented" }
 { type: "counter/decremented" }
 { type: "counter/incremented" }
@@ -186,7 +186,7 @@ Dispatch는 Action을 Reducer로 전달하는 함수이다. Dispatch를 통해 A
 
 - `store.dispatch(action)` : Action을 Reducer로 전달하는 함수
 
-```
+``` js
 store.dispatch({ type: "counter/incremented" });
 ```
 
@@ -196,7 +196,7 @@ store.dispatch({ type: "counter/incremented" });
 - `store.subscribe(callback)` : Store를 구독하는 함수
 - `store.getState()` : Store의 상태를 가져오는 함수
 
-```
+``` js
 function render() {
         const state = store.getState();
         valueEl.innerHTML = state.value.toString();
