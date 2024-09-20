@@ -1,0 +1,109 @@
+---
+title: Chrome Extension 아키텍처와 이해하기
+date: 2024/09/17
+description: Chrome Extension의 아키텍처와 개발 방법에 대해 알아보자.
+tag: Chrome, Extension, Web, Browser
+author: Kimrotti
+---
+
+# Chrome Extension 아키텍처와 개발하기
+
+## Chrome Extension이란?
+Chrome Extension은 크롬 브라우저에서 동작하는 확장 프로그램으로, 사용자의 브라우저 환경을 개선하거나 기능을 추가할 수 있습니다. 이번 글에서는 Chrome Extension의 아키텍처와 개발 방법에 대해 알아보자.
+
+## Chrome Extension 아키텍처
+Chrome Extension은 크게 5가지로 구성되어 있습니다.
+
+1. Manifest : 확장 프로그램의 정보를 담고 있는 파일로, 확장 프로그램의 이름, 버전, 아이콘, 권한 등을 설정할 수 있습니다.
+2. Background Script : 백그라운드에서 실행되는 스크립트로, 확장 프로그램의 주요 기능을 담당합니다.
+3. UI Elements : 팝업, 컨텐츠 스크립트, 옵션 페이지 등 사용자 인터페이스를 담당하는 요소입니다.
+4. Content Script : 웹 페이지에 주입되어 페이지의 DOM을 조작하거나 이벤트를 감지하는 스크립트입니다.
+5. Options Page : 확장 프로그램의 설정 페이지를 담당하는 스크립트입니다.
+
+
+![Chrome Extension Architecture](https://velog.velcdn.com/images%2Fwisdom_lee%2Fpost%2Fd9cfafe4-fbef-496c-8b9a-6181f197b53b%2Fimage.png)
+![Chrome Extension Architecture](https://velog.velcdn.com/images%2Fwisdom_lee%2Fpost%2Fb3c9a7c6-bdca-48b4-a070-65c3c08f761f%2Fimage.png)
+
+## manifest.json
+manifest.json은 Chrome Extension의 메타데이터와 설정을 정의하는 핵심 파일이다. 이 파일을 통해 Chrome 브라우저는 해당 extension의 기본정보와 동작 방식을 이해한다. manifest의 각 필드의 역할은 이하와 같다.
+
+- `name` : 이름
+- `version` : SemVer(주 버전.부 버전.수정 버전) 형식을 따르며 버전을 표시
+- `description` : extension 설명
+- `icon` : extension 아이콘
+- `background` : service_worker의 백그라운드 스크립트를 지정
+- `permission` : 확장 프로그램이 요청하는 권한을 정의
+- `cotent_script` : 특정 웹 페이지에 주입될 스크립트를 정의
+- `host_permission` : 확장 프로그램이 접근할 수 있는 특정 사이트의 권한
+
+### V2(백그라운드 스크립트)와 V3(서비스 워커) 차이
+
+| V2 (전통적인 background)        | V3 (Service Worker 기반 background)    |
+|-----------------------------|--------------------------------------|
+| **Persistent** 백그라운드 페이지 사용 | **Non-persistent** Service Worker 사용 |
+| 메모리 지속 사용                   | 이벤트 기반 실행, 메모리 절약                    |
+| HTML 파일도 백그라운드에서 실행 가능      | 오직 JavaScript 파일로만 백그라운드 실행          |
+
+[//]: # (- 기본 스레드 밖에서 작동합니다. 즉, 확장 프로그램 콘텐츠를 방해하지 않음)
+
+[//]: # (- 확장 프로그램 출처의 가져오기 이벤트&#40;예: 툴바 팝업&#41;를 가로채는 등의 특별한 기능)
+
+[//]: # (- [Clients 인터페이스]&#40;https://developer.mozilla.org/docs/Web/API/Clients&#41;를 통해 다른 컨텍스트와 통신하고 상호작용 가능)
+
+Manifest V3의 변화는 보안과 성능 최적화를 목표로 한 것으로, 특히 메모리 사용량을 줄이고 브라우저 성능에 미치는 영향을 최소화하는 데 초점이 맞춰져 있다.
+
+## Background.js
+
+- **백그라운드에서 실행**: `background.js`는 브라우저가 열려 있는 동안 계속 실행되거나, 특정 이벤트가 발생할 때 실행됩니다. 이때, `chrome.runtime`이나 `chrome.alarms` 같은 API를 통해 특정 작업을 처리합니다.
+- **이벤트 처리**: 이벤트 기반으로 동작하기 때문에, 알람 설정, 메시지 수신, 탭 관리 등 다양한 브라우저 이벤트를 처리할 수 있습니다.
+- **브라우저와의 상호작용**: 백그라운드에서 실행되므로 탭이나 브라우저 상태에 관계없이 다양한 브라우저 API를 사용할 수 있습니다.
+
+```javascript
+// 확장 프로그램 설치 시 동작
+chrome.runtime.onInstalled.addListener(() => {
+  console.log("확장 프로그램이 설치되었습니다.");
+});
+
+// 알람 이벤트 처리
+chrome.alarms.onAlarm.addListener((alarm) => {
+  console.log(`알람 이름: ${alarm.name}`);
+});
+
+// 메시지 수신
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message === "ping") {
+    sendResponse("pong");
+  }
+});
+```
+
+## Devtools.js
+
+`devtools.js`는 Chrome 확장 프로그램에서 개발자 도구(DevTools)를 확장하거나 커스터마이즈할 수 있는 스크립트입니다. 이 파일은 주로 **DevTools 확장**을 만드는 데 사용되며, 브라우저의 기본 개발자 도구에 새로운 패널, 사이드바, 탭 등을 추가하거나, 개발자가 디버깅할 때 필요한 특정 기능을 제공하는 역할을 합니다.
+
+- **개발자 도구 확장**: `devtools.js`는 기본 Chrome 개발자 도구에 새로운 기능을 추가할 수 있습니다. 예를 들어, 특정한 데이터를 분석하거나, 코드에서 특별한 로그나 정보를 시각화하는 데 사용할 수 있는 맞춤형 탭을 생성할 수 있습니다.
+- **커스터마이즈된 UI 추가**: DevTools에 새로운 **패널**, **사이드바**, **탭**을 추가하여 개발자에게 추가적인 정보나 도구를 제공할 수 있습니다.
+- **네트워크, 콘솔, DOM 등과 상호작용**: 개발자 도구의 다양한 기능(예: 콘솔 로그, 네트워크 요청, DOM 요소 등)에 접근하고, 이를 기반으로 추가적인 분석 기능을 제공할 수 있습니다.
+
+```javascript
+chrome.devtools.panels.create(
+  "My Panel",          // 패널 이름
+  "icon.png",          // 패널 아이콘
+  "panel.html",        // 패널에서 표시할 HTML 파일
+  function(panel) {    // 패널이 생성된 후 호출될 콜백 함수
+    console.log("Custom DevTools panel created");
+  }
+);
+```
+
+## 정리
+Chrome Extension은 크롬 브라우저에서 동작하는 확장 프로그램으로, 사용자의 브라우저 환경을 개선하거나 기능을 추가할 수 있다.
+
+Chrome Extension은 크게 Manifest, Background Script, UI Elements, Content Script, Options Page로 구성되어 있으며, 각 요소는 확장 프로그램의 동작 방식을 정의하고 구현한다. Chrome Extension을 개발할 때는 Manifest 파일을 통해 확장 프로그램의 정보와 동작 방식을 설정하고, Background Script를 통해 백그라운드에서 실행되는 주요 기능을 구현할 수 있다. 또한, DevTools를 확장하거나 커스터마이즈할 때는 Devtools.js를 사용하여 개발자 도구에 새로운 기능을 추가하거나 커스터마이즈할 수 있다.
+
+
+---
+
+**다음 글 읽으러 가기 →**
+
+[Chrome Extension으로 Mixpanel Devtools 제작하기](./extension-mixpanel)
