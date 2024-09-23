@@ -1,5 +1,5 @@
 ---
-title: Chrome Extension으로 Mixpanel Devtools 제작하기
+title: Mixpanel Devtools 제작기
 date: 2024/09/19
 description: Chrome Extension으로 Mixpanel Event Debugging 불편함 해결하기
 tag: Chrome, Extension, Web, Browser
@@ -7,3 +7,88 @@ author: Kimrotti
 ---
 
 # Chrome Extension으로 Mixpanel Event Debugging 불편함 해결하기
+
+## 설명
+평소 PA툴을 이용해 유저 데이터를 관찰하고 그로스해킹을 적용해 서비스에 문제를 푸는데 관심이 많아 GA4나 Mixpanel과 같은 툴을 회사에서 도입하고 데이터를 관리하는 일을 했었다. GTM의 경우 트리거를 실시간으로 확인할 수 있는 테스팅 페이지가 별도로 있고, GTM Manager 익스텐션을 통해 현재 이벤트가 발생했는지 확인하기 쉽지만, Mixpanel은 Event 탭에서 30초~1분 정도의 지연시간을 기다려야 내 이벤트가 적절히 셋팅됐다는 것을 확인할 수 있어 불편했다. 따라서 개발자가 빠르게 Mixpanel 이벤트가 올바르게 설치됐는지, 또한 원하는 프로퍼티가 잘셋팅됐는지 개발하면서 곧 바로 확인할 수 있는 익스텐션을 만들었다.
+
+## 구현 의도
+
+1. 웹사이트를 열면 background.js 스크립트를 로드
+2. 개발자 도구에서 panel을 열면 panel.js 스크립트를 로드한 후 port 연결을 확인
+3. port 연결이 확인됐을 시, bacground.js에서 이벤트를 전송할 권한을 획득함
+4. mixpanelUrlPattern을 가진 request url에 한해 Http Request를 intercept 후 payload 분석
+
+```bash
+manifest.json
+  ├── background.js (Service Worker)
+  │     └── Mixpanel HTTP Request Interception
+  │          └── Message to panel.js
+  │
+  ├── devtools.html
+  │     └── devtools.js (DevTools UI Interaction)
+  │
+  ├── panel.html
+        └── panel.js (Receives Message from background.js)
+             └── Creates log-list in panel.html
+```
+
+## 구현 내용
+
+### manifest.json
+![manifest.json](/images/extension-mixpanel/manifest.png)
+기본적인 메타 정보를 담고, 초기 업로드이므로 ver 1.0.0으로 배포하였다.
+
+**권한 설정**
+
+권한 설정의 경우 extention 배포시, 검토에서 가장 시간이 오래 걸리는 부분이므로 필요한 권한에 한해서 축소하는 것이 좋다.
+
+- `WebRequest`
+  - 이 권한은 익스텐션이 웹 요청을 모니터링하고, 가로채거나 수정할 수 있도록 허용합니다. 예를 들어, 사용자가 특정 웹사이트에 요청을 보낼 때 해당 요청의 헤더를 수정하거나, 특정 사이트의 트래픽을 차단하는 등의 작업을 할 수 있습니다.
+  - 주로 광고 차단기, 트래픽 분석, 보안 관련 익스텐션에서 많이 사용됩니다.
+- 앞으로 추가 예정
+  - `activeTab` : 이 권한은 사용자가 현재 활성화된 탭에서 특정 작업을 수행할 수 있도록 허용합니다. 사용자가 클릭을 통해 익스텐션을 활성화하면, 해당 탭에서 특정 스크립트를 실행하거나 페이지 내용을 읽는 등의 작업을 할 수 있습니다.
+
+
+### background.js
+![background.js](/images/extension-mixpanel/background.png)
+1. panel.js의 포트 연결상태를 확인하여 isActivated를 초기화합니다.
+2. Mixpanel.com으로 전송되는 HTTP 요청을 인터셉트하여, `isActivated`가 `true`일 경우 `panel.js`로 이벤트 메시지를 전송합니다. 이때, 요청의 본문은 `FormData` 형식이므로, 이를 JSON으로 변환하여 읽을 수 있는 객체 형태로 전달합니다.
+
+### panel.js
+![panel.js](/images/extension-mixpanel/panel.png)
+1. panel 스크립트가 로드됐을때, init을 통해 port 연결을 알립니다.
+2. background.js로부터 메시지를 수신하면, log-list 태그에 detail태그(드롭다운)를 추가하고 이벤트 명과 각각의 프로퍼티를 순회하며 추가합니다.
+
+## 트러블 슈팅
+**(1) 로그가 패널에 출력되지 않음**
+  1. dev console에서 출력 가능 → background.js에서는 네트워크를 잘감지하고 있음
+  2. panel.js에서 이벤트를 전달받는 과정에 문제가 발생 → 콘솔이 출력되지 않음
+  3. 포트를 크게 열어 모든 데이터를 받도록 변경 → 특정 포트가 아닌 메세지의 타입을 기준으로 분기하는 것으로 변경
+![console](/images/extension-mixpanel/console.png)
+
+**(2) Mixpanel Event를 사용하는 모든 웹사이트의 이벤트가 출력되는 문제**
+해당 문제는 레이어를 추가함으로써 유저의 행동에 제약을 걸거나, 선택지를 주는 방식으로 UX를 한 단계 추가하여 해결할 수 있다.
+  1. 이벤트가 수집되는 사이트의 도메인을 확인하여, 해당 도메인에 대해서만 이벤트를 출력하도록 변경
+  2. 현재 active된 탭의 도메인을 확인하여, 해당 도메인에 대해서만 이벤트를 출력하도록 변경
+  3. 사용자가 선택할 수 있는 옵션을 추가하여, 해당 옵션에 대해서만 이벤트를 출력하도록 변경
+
+**(3) 권한 이슈로 인한 배포 통과 실패**
+  1. 배포 시, 검사에는 대략 2일 정도 소요됨
+  2. 권한을 최소한으로 축소하여, 검사를 통과하도록 변경
+  3. 배포 통과 완료
+
+## 배포
+Chrome Extension은 크롬 스토어에 배포하기 위해서는 크롬 웹 스토어 개발자 계정이 필요하다. 배포 과정은 이하와 같다.
+1. 크롬 웹 스토어 개발자 계정 생성
+2. `확장 프로그램 게시` 클릭 후, 압축된 폴더 업로드
+3. 권한 설정 및 익스텐션 설명 (권한을 최소한 축소해야 검사가 쉽게 통과됨)
+4. 배포
+![success](/images/extension-mixpanel/success.png)
+![deploy](/images/extension-mixpanel/deploy.png)
+
+
+**바로가기** : [Chrome Extension - Mixpanel Devtools](https://chromewebstore.google.com/detail/mixpanel-devtools/meiifhjfgegkkpijdpgaidghahmjhkda)
+
+
+## 앞으로..
+현재는 Mixpanel 이벤트를 붙이는 개발자에게 편의를 제공하는 수준의 원시적인 로그툴이라면, devtools로 확장되기 위해서는 원하는 퍼널에 맞는 이벤트가 순차적으로 수집되는지, 이벤트의 중복 또는 누락이 있는지 등을 확인할 수 있는 기능이 추가되어야 한다. 또한, 이벤트를 수집하는 도메인을 선택할 수 있는 옵션을 추가하여, 사용자가 원하는 도메인에 대해서만 이벤트를 확인할 수 있도록 하는 것이 필요하다. 앞으로 지속적인 업데이를 통해 Mixpanel을 사용하는 사용자들이 더욱 편리하게 이벤트를 확인할 수 있도록 개선할 예정이다.
