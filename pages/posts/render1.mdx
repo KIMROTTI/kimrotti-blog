@@ -1,0 +1,67 @@
+---
+title: CSR, SSR, SSG 그리고 ISR(Next.js)
+date: 2023/06/05
+description: SPA에서 MPA로, 그리고 SSR, SSG, CSR을 비교하며 Next.js 13 이상의 ISR을 알아보자.
+tag: CSR, SSR, SSG, Next.js
+author: Kimrotti
+---
+
+# CSR, SSR, SSG 그리고 ISR(Next.js)
+
+## SPA에서 MPA로
+입사 후 첫 프로젝트에서 React CRA(Create-React-App)가 익숙해 SPA(Single Page Application) 형태의 웹사이트를 제작하였다. SPA는 초기 로딩 속도가 빠르고, 초기 로딩으로 부드러운 사용성을 제공할 수 있어 개인적인 사용성이 좋았다. 다만, 검색엔진 최적화(SEO)가 어렵고, 초기 로딩 속도가 빠르더라도 사용자가 웹사이트를 이용하는 동안에는 서버로부터 데이터를 받아오는데 시간이 걸리는 단점이 있었다. 이러한 단점을 보완하기 위해 MPA(Multi Page Application)를 사용하는 Next.js를 도입하게 되었다.
+
+- **SPA(Single Page Application)**
+  - 단일 HTML 파일을 서버로부터 받아오고, 이후에는 서버로부터 받아온 데이터를 이용하여 페이지를 렌더링하는 방식 (CRA의 index.html)
+
+
+- **MPA(Multi Page Application)**
+  - 서버로부터 각 페이지에 대한 HTML 파일을 받아오는 방식
+
+SPA는 첫 페이지만 서버에서 받아오고, 이후 클라이언트에서 데이터를 받아 동적으로 변경한다. MPA는 여러 페이지를 서버에서 렌더링하여 제공한다.
+
+
+## CSR과 SSR, SSG
+
+간단하게 렌더링의 방식을 비교하고, 각각의 장단점을 알아보자.
+
+- **CSR(Client Side Rendering)**
+  - SPA에서 사용되는 렌더링 방식으로, 서버로부터 받아온 HTML 파일에 JS 파일을 통해 데이터를 받아와 렌더링하는 방식
+  - 장점 : 동적으로 페이지를 렌더링할 수 있고, UX를 매끄럽게 제공하면 부드러운 화면 전환을 제공할 수 있다.
+  - 단점 : FCP, FP 등의 성능 지표가 떨어지고, 크롤링하기 어려워 SEO에 취약하다.
+
+- **SSR(Server Side Rendering)**
+  - 클라이언트의 요청 시, 서버에서 HTML 파일을 렌더링하여 클라이언트에게 전달하는 방식
+  - 장점 : SEO에 유리하고, 초기 로딩 속도가 빠르다.
+  - 단점 : 서버에 부하가 걸리고, 사용자가 많아질수록 서버에 부하가 커진다.
+
+- **SSG(Static Site Generation)**
+  - 미리 정적 파일을 생성하여 서버에 배포하는 방식
+  - 장점 : 초기 로딩 속도가 빠르고, SEO에 유리하다.
+  - 단점 : 동적인 페이지를 제공하기 어렵다.
+
+---
+
+## Next.js의 렌더링 전략
+
+### Next 13버전 이후의 변경점
+
+Next.js 13 버전에서는 SSR과 SSG를 처리하는 방식이 `fetch`함수의 사용 방식으로 변경되었다. 이러한 변경점은 fetch 함수의 옵션을 통해 SSR과 SSG를 설정할 수 있다.
+
+
+**SSR, SSG, ISR 동작 방식 요약:**
+| 렌더링 방식                       | 사용법                                             | 설명                                                                 |
+|------------------------------------|----------------------------------------------------|----------------------------------------------------------------------|
+| SSR (Server-Side Rendering)        | `fetch(url, { cache: 'no-store' })`                | 매 요청마다 서버에서 새로운 데이터를 가져와 페이지를 렌더링합니다.       |
+| SSG (Static Site Generation)       | `fetch(url)` (기본 설정) 또는 `fetch(url, { cache: 'force-cache' })` | 빌드 시 데이터를 한 번만 가져와 정적 페이지를 생성하고 이후 캐시된 정적 페이지를 제공. |
+| ISR (Incremental Static Regeneration) | `fetch(url, { next: { revalidate: 10 } })`         | 정적 페이지를 제공하되, 설정된 시간 간격마다 페이지를 백그라운드에서 다시 생성. |
+
+### ISR(Incremental Static Regeneration)
+
+- **ISR(Incremental Static Regeneration)**
+  - 정적 페이지를 제공하되, 설정된 시간 간격마다 페이지를 백그라운드에서 다시 생성하는 방식
+  - 장점 : 정적 페이지를 제공하면서, 설정된 시간 간격마다 페이지를 업데이트할 수 있다.
+  - 단점 : 설정된 시간 간격마다 페이지를 업데이트하므로, 설정된 시간 간격동안은 이전 페이지를 제공한다.
+
+ISR은 정적인 HTML 페이지를 일정 주기로 업데이트하는 방식이다. Next.js에서 미리 페이지를 Static하게 생성하고, 일정 시간이 지난 후 백그라운드에서 페이지를 다시 생성하여 서버 부하를 줄이면서 최신 데이터를 제공한다.
+
