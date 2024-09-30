@@ -11,11 +11,11 @@ author: Kimrotti
 ## SPA에서 MPA로
 입사 후 첫 프로젝트에서 React CRA(Create-React-App)가 익숙해 SPA(Single Page Application) 형태의 웹사이트를 제작하였다. SPA는 초기 로딩 속도가 빠르고, 초기 로딩으로 부드러운 사용성을 제공할 수 있어 개인적인 사용성이 좋았다. 다만, 검색엔진 최적화(SEO)가 어렵고, 초기 로딩 속도가 빠르더라도 사용자가 웹사이트를 이용하는 동안에는 서버로부터 데이터를 받아오는데 시간이 걸리는 단점이 있었다. 이러한 단점을 보완하기 위해 MPA(Multi Page Application)를 사용하는 Next.js를 도입하게 되었다.
 
-- **SPA(Single Page Application)**
+**SPA(Single Page Application)**
   - 단일 HTML 파일을 서버로부터 받아오고, 이후에는 서버로부터 받아온 데이터를 이용하여 페이지를 렌더링하는 방식 (CRA의 index.html)
 
 
-- **MPA(Multi Page Application)**
+**MPA(Multi Page Application)**
   - 서버로부터 각 페이지에 대한 HTML 파일을 받아오는 방식
 
 SPA는 첫 페이지만 서버에서 받아오고, 이후 클라이언트에서 데이터를 받아 동적으로 변경한다. MPA는 여러 페이지를 서버에서 렌더링하여 제공한다.
@@ -25,12 +25,12 @@ SPA는 첫 페이지만 서버에서 받아오고, 이후 클라이언트에서 
 
 간단하게 렌더링의 방식을 비교하고, 각각의 장단점을 알아보자.
 
-- **CSR(Client Side Rendering)**
+**CSR(Client Side Rendering)**
   - SPA에서 사용되는 렌더링 방식으로, 서버로부터 받아온 HTML 파일에 JS 파일을 통해 데이터를 받아와 렌더링하는 방식
   - 장점 : 동적으로 페이지를 렌더링할 수 있고, UX를 매끄럽게 제공하면 부드러운 화면 전환을 제공할 수 있다.
   - 단점 : FCP, FP 등의 성능 지표가 떨어지고, 크롤링하기 어려워 SEO에 취약하다.
 
-- **SSR(Server Side Rendering)**
+**SSR(Server Side Rendering)**
   - 클라이언트의 요청 시, 서버에서 HTML 파일을 렌더링하여 클라이언트에게 전달하는 방식
   - 장점 : SEO에 유리하고, 초기 로딩 속도가 빠르다.
   - 단점 : 서버에 부하가 걸리고, 사용자가 많아질수록 서버에 부하가 커진다.
