@@ -1,0 +1,63 @@
+---
+title: RN-Jenkins 배포 트러블 슈팅 기록
+date: 2024/11/02
+description: cocoapods 특정 버전의 권한 문제로 인한 배포 실패
+tag: React, React Native, Jenkins, CI/CD
+author: Kimrotti
+---
+
+react-native 개발을 하며 프로필 페이지에 신규 기능의 history를 보여줄 필요가 있어 수정 후 master 브랜치에서 푸시하여 jenkins에서 테스팅을 하는 과정에서 에러가 발생하였다.
+
+- 2024-10-29일 Jenkins에서 iOS 빌드 오류
+
+```
+10:40:23  [10:40:23]: ▸ [35m[31m❌  error: Sandbox: rsync.samba(8840) deny(1) file-write-create /Users/jenkins/Library/Developer/Xcode/DerivedData/SimsimiReactNative-ajloljgsmbpdjugapdrygvwjjhax/Build/Intermediates.noindex/ArchiveIntermediates/SimsimiReactNativeProduct/BuildProductsPath/Release-iphoneos/XCFrameworkIntermediates/BURelyFoundation_Global/AFNetworking/Headers (in target 'BURelyFoundation_Global' from project 'Pods')[0m
+
+```
+
+```
+error: Sandbox: rsync.samba(8851) deny(1) file-write-create
+```
+
+**Showing Recent Errors Only**
+
+Sandbox: rsync.samba(89945) deny(1) file-write-create /Users/jenkins/Developement/simsimi-react-native/ios/build/Debug-iphonesimulator/XCFrameworkIntermediates/VungleAds/VungleAdsSDK.framework/Headers
+
+위의 에러는 DerivedData 폴더에 파일 또는 폴더를 생성하지 못하는 문제로 xcode 접근 권한의 문제일까 싶어 Build Setting > Build Options > User Script Sandboxing을 No로 설정하였으나, 문제가 해결되지 않았다.
+
+
+### apple dev forums에 이상증상에 대한 글을 확인
+
+https://forums.developer.apple.com/forums/thread/767371
+동일한 OS에서 비슷한 문제를 겪고 있는 사람을 발견했다. 따라서 특정 버전의 문제일 가능성을 갖고 접근했다.
+
+- 아침에 확인해보니 cocoapods을 1.16.0으로 업데이트하면 문제 해결된다고 함.
+
+### react-native issue page에 문제 글을 확인
+
+https://github.com/facebook/react-native/issues/47228
+
+- cocoapods을 1.16.0으로 업데이트 하던가,
+- xcodeproj를 1.25.1으로 다운그레이드 해야함
+
+
+### Stable 버전으로 변경
+
+- cocoapods 업데이트 이력
+  - 1.16.0 - 2024-10-29 배포, xcode 16관련 sandbox 수정이 있었음
+  - 1.16.1 - 2024-10-30 배포, sandbox 오류 해결된 버전
+- xcodeproj 업데이트 이력
+  - 1.26.0 - 2024-10-27 (문제의 버전으로 추론)
+  - 1.25.1 - 2024-10-03
+- cocoapods 업데이트로 인한 빌드환경 오류가 우려되어, xcodeproj 를 다운그레이드 함.
+
+### 적용방법
+
+Jenkins가 돌아가는 mac-mini에서 버전 변경
+
+1. mac-mini에서 xcodeproj 1.26.0 수동 삭제
+ - 콘솔에서 gem list 로 설치버전 확인
+ - 콘솔에서 gem uninstall xcodeproj -x --ignore-dependencies 입력
+  - 1.26.0을 선택하여 삭제
+2. ios Gemfile 에 1.26.0 을 사용하지 않도록 적용
+ - gem 'xcodeproj', ['!= 1.26.0', ]
